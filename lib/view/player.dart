@@ -1,29 +1,45 @@
 import 'package:audio_player/constants/colors.dart';
 import 'package:audio_player/constants/text_style.dart';
+import 'package:audio_player/controllers/player_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 class Player extends StatelessWidget {
-  const Player({super.key});
+  final SongModel data;
+  const Player({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
+    var controller = Get.find<PlayerController>();
+
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
         child: Column(
           children: [
             Expanded(
                 child: Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.red,
-              ),
-              alignment: Alignment.center,
-              child: const Icon(Icons.music_note),
-            )),
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    height: 300,
+                    width: 300,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: QueryArtworkWidget(
+                      id: data.id,
+                      type: ArtworkType.AUDIO,
+                      artworkHeight: double.infinity,
+                      artworkWidth: double.infinity,
+                      nullArtworkWidget: const Icon(
+                        Icons.music_note,
+                        size: 48,
+                        color: Colors.white,
+                      ),
+                    ))),
             const SizedBox(
               height: 12,
             ),
@@ -40,7 +56,7 @@ class Player extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      'Music Name',
+                      data.displayNameWOExt,
                       style: ourStyle(
                         color: bgDarkColor,
                         family: bold,
@@ -51,7 +67,7 @@ class Player extends StatelessWidget {
                       height: 12,
                     ),
                     Text(
-                      'Artist Name',
+                      data.artist.toString(),
                       style: ourStyle(
                         color: bgDarkColor,
                         family: regular,
@@ -64,13 +80,16 @@ class Player extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          "0:0",
+                          "00:00",
                           style: ourStyle(
                             color: bgDarkColor,
                           ),
                         ),
                         Expanded(
                           child: Slider(
+                            thumbColor: sliderColor,
+                            inactiveColor: bgColor,
+                            activeColor: sliderColor,
                             value: 0.0,
                             onChanged: (newValue) {},
                           ),
@@ -79,6 +98,59 @@ class Player extends StatelessWidget {
                           "04:00",
                           style: ourStyle(
                             color: bgDarkColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.skip_previous_rounded,
+                            color: bgDarkColor,
+                            size: 40,
+                          ),
+                        ),
+                        Obx(
+                          () => CircleAvatar(
+                            radius: 35,
+                            backgroundColor: bgDarkColor,
+                            child: Transform.scale(
+                              scale: 2.5,
+                              child: IconButton(
+                                onPressed: () {
+                                  if (controller.isPlaying.value) {
+                                    controller.audioPlayer.pause();
+                                    controller.isPlaying(false);
+                                  } else {
+                                    controller.audioPlayer.play();
+                                    controller.isPlaying(true);
+                                  }
+                                },
+                                icon: controller.isPlaying.value
+                                    ? const Icon(
+                                        Icons.pause,
+                                        color: Colors.white,
+                                      )
+                                    : const Icon(
+                                        Icons.play_arrow_rounded,
+                                        color: Colors.white,
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.skip_next_rounded,
+                            color: bgDarkColor,
+                            size: 40,
                           ),
                         ),
                       ],
