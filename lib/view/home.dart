@@ -1,6 +1,7 @@
 import 'package:audio_player/constants/colors.dart';
 import 'package:audio_player/constants/text_style.dart';
 import 'package:audio_player/controllers/player_controller.dart';
+import 'package:audio_player/view/player.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -95,7 +96,9 @@ class Home extends StatelessWidget {
                               )
                             : null,
                         onTap: () {
-                          controller.playSong(snapshot.data![index].uri, index);
+                          // ignore: prefer_const_constructors
+                          Get.to(() => Player());
+                          // controller.playSong(snapshot.data![index].uri, index);
                         },
                       ),
                     ),
