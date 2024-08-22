@@ -29,6 +29,13 @@ class PlayerController extends GetxController {
     searchController.addListener(() {
       filterSongs(searchController.text);
     });
+
+    // Tambahkan listener untuk mendeteksi kapan lagu selesai
+    audioPlayer.playerStateStream.listen((playerState) {
+      if (playerState.processingState == ProcessingState.completed) {
+        playNextSong();
+      }
+    });
   }
 
   void fetchSongs() async {
@@ -82,6 +89,17 @@ class PlayerController extends GetxController {
       updatePosition();
     } on Exception catch (e) {
       print(e.toString());
+    }
+  }
+
+  playNextSong() {
+    if (playIndex.value < filteredSongs.length - 1) {
+      playIndex.value++;
+      var nextSong = filteredSongs[playIndex.value];
+      playSong(nextSong.uri, playIndex.value);
+    } else {
+      // Lagu berikutnya tidak tersedia (akhir daftar)
+      isPlaying(false);
     }
   }
 

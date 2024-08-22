@@ -23,7 +23,7 @@ class Home extends StatelessWidget {
             "Musik Anda",
             style: ourStyle(
               family: bold,
-              size: 18,
+              size: 24,
             ),
           ),
         ),
@@ -66,7 +66,7 @@ class Home extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   margin: const EdgeInsets.only(
-                    bottom: 8,
+                    bottom: 10,
                   ),
                   child: Obx(
                     () => ListTile(
@@ -96,7 +96,7 @@ class Home extends StatelessWidget {
                           ? const Icon(
                               Icons.play_arrow,
                               color: whiteColor,
-                              size: 26,
+                              size: 30,
                             )
                           : null,
                       onTap: () {

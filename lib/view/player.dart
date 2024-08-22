@@ -16,10 +16,10 @@ class Player extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: whiteColor),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
         child: Column(
           children: [
             Obx(
@@ -39,13 +39,13 @@ class Player extends StatelessWidget {
                         artworkWidth: double.infinity,
                         nullArtworkWidget: const Icon(
                           Icons.music_note,
-                          size: 48,
+                          size: 50,
                           color: Colors.white,
                         ),
                       ))),
             ),
             const SizedBox(
-              height: 20,
+              height: 12,
             ),
             Expanded(
               child: Container(
@@ -82,7 +82,7 @@ class Player extends StatelessWidget {
                         style: ourStyle(
                           color: bgDarkColor,
                           family: regular,
-                          size: 20,
+                          size: 18,
                         ),
                       ),
                       const SizedBox(
@@ -146,7 +146,7 @@ class Player extends StatelessWidget {
                               radius: 40,
                               backgroundColor: bgDarkColor,
                               child: Transform.scale(
-                                scale: 3.0,
+                                scale: 2.5,
                                 child: IconButton(
                                   onPressed: () {
                                     if (controller.isPlaying.value) {
