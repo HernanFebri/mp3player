@@ -17,102 +17,106 @@ class Home extends StatelessWidget {
       backgroundColor: bgDarkColor,
       appBar: AppBar(
         backgroundColor: bgDarkColor,
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search,
-                color: whiteColor,
-              ))
-        ],
-        leading: const Icon(
-          Icons.sort_rounded,
-          color: whiteColor,
-        ),
-        title: Text("Beats",
+        actions: const [],
+        title: Center(
+          child: Text(
+            "Musik Anda",
             style: ourStyle(
               family: bold,
               size: 18,
-            )),
-      ),
-      body: FutureBuilder<List<SongModel>>(
-        future: controller.audioQuery.querySongs(
-          ignoreCase: true,
-          orderType: OrderType.ASC_OR_SMALLER,
-          sortType: null,
-          uriType: UriType.EXTERNAL,
+            ),
+          ),
         ),
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.data == null) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.data!.isEmpty) {
-            return Center(
-              child: Text(
-                "No song found",
-                style: ourStyle(),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(50.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: controller.searchController,
+              style: ourStyle(color: whiteColor),
+              decoration: InputDecoration(
+                hintText: 'Cari Lagu...',
+                hintStyle: ourStyle(color: whiteColor.withOpacity(0.5)),
+                prefixIcon: const Icon(Icons.search, color: whiteColor),
+                filled: true,
+                fillColor: bgColor,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide.none,
+                ),
               ),
-            );
-          } else {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: snapshot.data!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    margin: const EdgeInsets.only(
-                      bottom: 8,
-                    ),
-                    child: Obx(
-                      () => ListTile(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        tileColor: bgColor,
-                        title: Text(
-                          snapshot.data![index].displayNameWOExt,
-                          style: ourStyle(family: bold, size: 15),
-                        ),
-                        subtitle: Text(
-                          "${snapshot.data![index].artist}",
-                          style: ourStyle(family: regular, size: 12),
-                        ),
-                        leading: QueryArtworkWidget(
-                          id: snapshot.data![index].id,
-                          type: ArtworkType.AUDIO,
-                          nullArtworkWidget: const Icon(
-                            Icons.music_note,
-                            color: whiteColor,
-                            size: 32,
-                          ),
-                        ),
-                        trailing: controller.playIndex.value == index &&
-                                controller.isPlaying.value
-                            ? const Icon(
-                                Icons.play_arrow,
-                                color: whiteColor,
-                                size: 26,
-                              )
-                            : null,
-                        onTap: () {
-                          // ignore: prefer_const_constructors
-                          Get.to(
-                              () => Player(
-                                    data: snapshot.data![index],
-                                  ),
-                              transition: Transition.downToUp);
-                          controller.playSong(snapshot.data![index].uri, index);
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-            );
-          }
-        },
+            ),
+          ),
+        ),
       ),
+      body: Obx(() {
+        if (controller.filteredSongs.isEmpty) {
+          return Center(
+            child: Text(
+              "Tidak ada lagu ditemukan",
+              style: ourStyle(),
+            ),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: controller.filteredSongs.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  margin: const EdgeInsets.only(
+                    bottom: 8,
+                  ),
+                  child: Obx(
+                    () => ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      tileColor: bgColor,
+                      title: Text(
+                        controller.filteredSongs[index].displayNameWOExt,
+                        style: ourStyle(family: bold, size: 15),
+                      ),
+                      subtitle: Text(
+                        "${controller.filteredSongs[index].artist}",
+                        style: ourStyle(family: regular, size: 12),
+                      ),
+                      leading: QueryArtworkWidget(
+                        id: controller.filteredSongs[index].id,
+                        type: ArtworkType.AUDIO,
+                        nullArtworkWidget: const Icon(
+                          Icons.music_note,
+                          color: whiteColor,
+                          size: 32,
+                        ),
+                      ),
+                      trailing: controller.playIndex.value == index &&
+                              controller.isPlaying.value
+                          ? const Icon(
+                              Icons.play_arrow,
+                              color: whiteColor,
+                              size: 26,
+                            )
+                          : null,
+                      onTap: () {
+                        Get.to(
+                          () => Player(
+                            data: controller.filteredSongs,
+                          ),
+                          transition: Transition.downToUp,
+                        );
+                        controller.playSong(
+                            controller.filteredSongs[index].uri, index);
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }
+      }),
     );
   }
 }
