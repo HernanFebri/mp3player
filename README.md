@@ -6,3 +6,9 @@ Ini adalah aplikasi Flutter sederhana yang mendemonstrasikan cara menggunakan pa
 
 - Memutar, menjeda, dan menghentikan file audio.
 - Mendukung file audio lokal dan remote.
+
+##
+
+- Jangan lupa untuk mengizinkan pencarian data lagu
+
+# DONE THANKS
