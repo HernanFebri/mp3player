@@ -12,6 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
   get: ^4.6.6
   just_audio: ^0.9.39
   on_audio_query: ^2.9.0
@@ -22,5 +23,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/logoNZ.png
